@@ -9,7 +9,7 @@
 // - stamina_loss_scaler,
 // - type.
 
-[
+let charged_moves = [
     {
         "critical_chance": 0.05,
         "duration": 2900,
