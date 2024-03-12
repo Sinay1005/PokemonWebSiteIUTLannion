@@ -1,7 +1,7 @@
 // https://pogoapi.net/api/v1/cp_multiplier.json
 // Returns a JSON array of objects, the values of the array are an object with the keys level and multiplier.
 
-[
+let cp_multiplier = [
     {
         "level": 1,
         "multiplier": 0.09399999678134918

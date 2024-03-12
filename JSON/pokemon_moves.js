@@ -8,7 +8,7 @@
 // - an array of charged moves learnable from an elite TM, 
 // - an array of fast legacy fast moves, 
 // and optionally the form.
-[
+let pokemon_moves = [
     {
         "charged_moves": [
             "Sludge Bomb",
