@@ -8760,3 +8760,4 @@ let pokemon = [
         "pokemon_name": "Calyrex"
 }
 ]
+module.exports = { pokemon };

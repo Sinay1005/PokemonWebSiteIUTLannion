@@ -18000,3 +18000,4 @@ let pokemon_moves = [
         "pokemon_name": "Calyrex"
     }
 ]
+module.exports = { pokemon_moves } ;
