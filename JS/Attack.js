@@ -1,7 +1,7 @@
-const { fast_moves } = require('../JSON/fast_moves');
-const { charged_moves } = require('../JSON/charged_moves');
+import { fast_moves }  from '../JSON/fast_moves.js';
+import { charged_moves } from '../JSON/charged_moves.js';
 
-class Attack {
+ export class Attack {
 
     static all_attacks = {};
 
@@ -46,4 +46,3 @@ class Attack {
         }
     }
 }
-module.exports = Attack;

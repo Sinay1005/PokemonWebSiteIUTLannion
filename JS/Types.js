@@ -1,12 +1,13 @@
-const { type_effectiveness } = require('../JSON/type_effectiveness');
+import { type_effectiveness}  from '../JSON/type_effectiveness.js';
 
-class Types {
+ export class Types {
     static all_types = {};
 
     constructor(type) {
         if (Types.all_types[type]) {
             return Types.all_types[type];
         }
+        
         this.m_type = type;
         this.m_type_effectiveness = type_effectiveness[type];
         Types.all_types[type] = this;
@@ -17,4 +18,3 @@ class Types {
         return `Type : ${this.m_type}, Type effectiveness : ${this.m_type_effectiveness}`;
     }
 }
-module.exports = Types;

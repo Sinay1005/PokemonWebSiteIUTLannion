@@ -9296,4 +9296,4 @@ let pokemon_types = [
 ]
 }
 ]
-module.exports = { pokemon_types };
+export { pokemon_types };

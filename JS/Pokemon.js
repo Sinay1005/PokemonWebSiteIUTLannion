@@ -1,10 +1,10 @@
-const { pokemon } = require('../JSON/pokemon');
-const { pokemon_types } = require('../JSON/pokemon_type');
-const { pokemon_moves } = require('../JSON/pokemon_moves');
-const Types = require('./Types');
-const Attack = require('./Attack');
+import { pokemon } from '../JSON/pokemon.js';
+import { pokemon_types } from '../JSON/pokemon_type.js';
+import { pokemon_moves }  from '../JSON/pokemon_moves.js';
+import  {Types } from '../JS/Types.js';
+import {Attack} from '../JS/Attack.js'; 
 
-class Pokemon{
+ export class Pokemon{
 
     static  all_pokemons = {};
     
@@ -78,10 +78,11 @@ class Pokemon{
         });
     }
 }
-
+/** 
 Pokemon.import_pokemon();
 
-const pikachu = Pokemon.all_pokemons[25];
+const pikachu = Pokemon.all_pokemons;
+
 
 console.log(pikachu.toString());
 console.log("\n"); 
@@ -96,3 +97,5 @@ console.log("\n");
 
 
 console.log(Pokemon.all_pokemons);
+
+*/

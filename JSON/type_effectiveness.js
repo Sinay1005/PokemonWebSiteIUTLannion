@@ -362,4 +362,4 @@ let type_effectiveness = {
         "Water": 0.625
     }
 }
-module.exports = { type_effectiveness };
+export  { type_effectiveness };
