@@ -640,3 +640,4 @@ let fast_moves = [
         "type": "Grass"
 }
 ]
+module.exports = { fast_moves };
