@@ -1781,4 +1781,4 @@ let charged_moves = [
         "type": "Flying"
 }
 ]
-module.exports = { charged_moves };
+export  { charged_moves };
