@@ -15,6 +15,6 @@ import { type_effectiveness}  from '../JSON/type_effectiveness.js';
     }
 
     toString() {
-        return `Type : ${this.m_type}, Type effectiveness : ${this.m_type_effectiveness}`;
+        return `Type : ${this.m_type}, Type effectiveness : ${JSON.stringify(this.m_type_effectiveness)}`;
     }
 }

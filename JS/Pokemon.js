@@ -8,7 +8,7 @@ import {Attack} from '../JS/Attack.js';
 
     static  all_pokemons = {};
     
-    constructor(id,name,form,base_defense,base_attack,base_stamina,type, attack){
+    constructor(id,name,form,base_defense,base_attack,base_stamina,type, charged_moves, fast_moves){
         if (Pokemon.all_pokemons[id]) {
             return Pokemon.all_pokemons[id];
         }
@@ -19,12 +19,13 @@ import {Attack} from '../JS/Attack.js';
         this.m_base_defense = base_defense;
         this.m_base_stamina = base_stamina;
         this.m_type = type;
-        this.m_attack = attack;
+        this.m_charged_moves = charged_moves;
+        this.m_fast_moves = fast_moves;
         return this;
     }
 
     toString() {
-        return `Pokemon ID: ${this.m_id}, Name: ${this.m_nom}, Form: ${this.m_form}, Base Attack: ${this.m_base_attack}, Base Defense: ${this.m_base_defense}, Base Stamina: ${this.m_base_stamina}, Type: ${this.m_type}, Attack: ${this.m_attack}`;
+        return `Pokemon ID: ${this.m_id}, Name: ${this.m_nom}, Form: ${this.m_form}, Base Attack: ${this.m_base_attack}, Base Defense: ${this.m_base_defense}, Base Stamina: ${this.m_base_stamina}, Type: ${this.m_type}, Charged_moves: ${this.m_charged_moves}, Fast_moves: ${this.m_fast_moves}`;
     }
 
     getTypes() {
@@ -32,7 +33,7 @@ import {Attack} from '../JS/Attack.js';
     }
     
     getAttacks(){
-        return this.m_attack.map(item => item);
+        return [this.m_fast_moves, this.m_charged_moves];
     }
 
     static getTypesIntoFile(id) {
@@ -61,27 +62,28 @@ import {Attack} from '../JS/Attack.js';
                     pokemon_types.push(type);
                 });
     
-                let pokemonMoves = [];
+                let charged_moves_table = [];
                 let moves = Pokemon.getAttacksIntoFile(pokemon_id);
                 moves.charged_moves.forEach(move => {
                     let newMove = new Attack(move, "charged_moves");
-                    pokemonMoves.push(newMove);
+                    charged_moves_table.push(newMove);
                 })
+                let fest_moves_table = [];
                 moves.fast_moves.forEach(move => {
                     let newMove = new Attack(move, "fast_moves");
-                    pokemonMoves.push(newMove);
+                    fest_moves_table.push(newMove);
                 })
                 
-                const newPokemon = new Pokemon(pokemon_id, pokemon_name, form, base_defense, base_attack, base_stamina, pokemon_types, pokemonMoves);
+                const newPokemon = new Pokemon(pokemon_id, pokemon_name, form, base_defense, base_attack, base_stamina, pokemon_types, charged_moves_table, fest_moves_table);
                 Pokemon.all_pokemons[pokemon_id] = newPokemon;
             }
         });
     }
 }
-/** 
+
 Pokemon.import_pokemon();
 
-const pikachu = Pokemon.all_pokemons;
+const pikachu = Pokemon.all_pokemons[25];
 
 
 console.log(pikachu.toString());
@@ -97,5 +99,3 @@ console.log("\n");
 
 
 console.log(Pokemon.all_pokemons);
-
-*/
