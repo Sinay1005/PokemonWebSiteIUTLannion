@@ -80,7 +80,7 @@ import {Attack} from '../JS/Attack.js';
         });
     }
 }
-
+/** 
 Pokemon.import_pokemon();
 
 const pikachu = Pokemon.all_pokemons[25];
@@ -99,3 +99,4 @@ console.log("\n");
 
 
 console.log(Pokemon.all_pokemons);
+*/
