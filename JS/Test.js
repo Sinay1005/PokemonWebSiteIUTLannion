@@ -224,10 +224,10 @@ function getWeakestEnemies(attackName){
             Object.keys(lesPokemons).forEach(function(key){
                 let lePokemon = lesPokemons[parseInt(key)];
                 let typeOfPokemon = lePokemon.getTypes();
-                let sommeEfficace;
+                let sommeEfficace=1;
                 // Pour chaque pokemon on va tester les efficacités de l'attaque sur lui (en testant les types du pokemons)
                 Object.values(typeOfPokemon).forEach(function(elementTypes){
-                    sommeEfficace = 1;
+                   
                     // On parcout les efficacités de l'attaque sur le(s) type(s) du pokemon
                     Object.entries(lesEfficacites.m_type_effectiveness).forEach(function(elementEfficace){
 
@@ -249,7 +249,8 @@ function getWeakestEnemies(attackName){
                     resultatWeakestEnemies = [];
                     resultatWeakestEnemies.push(pokemon)
                 }
-                //console.log(maxEfficacite)
+                
+                console.log(maxEfficacite)
                 
                
             })
@@ -269,7 +270,7 @@ function getWeakestEnemies(attackName){
 }
 
 // Test de la question 6 pour l'attaque Acide de type Poison
-//console.log(getWeakestEnemies("Acid"))
+//console.log(getWeakestEnemies("Blizzard"))
 
 
 // 7) Retourne la liste des types d'attaques les plus efficaces contre un Pokemon donné
@@ -278,8 +279,55 @@ function getWeakestEnemies(attackName){
 function getBestAttackTypesForEnemy(name){
     // Résultat des types d'attaques efficace sur le pokemon
     let resultatAttackTypes = [];
+    let pokemon;
+    // On cherche à retrouver le type du Pokemon par rapport à son nom
+    Object.entries(lesPokemons).forEach(function(elementPokemon){
+        
+        
+        if(elementPokemon[1].m_nom == name){
+            pokemon = elementPokemon[1];
+            return;
+        }
+    })
+    let typeOfPokemon = pokemon.getTypes();
+    
+    let maxEfficacite = -1;
+    let somme;
+    let lesTypes = Types.all_types;
+    
+    
+        Object.entries(lesTypes).forEach(function(elementSecondType){
+            somme = 1;
+            Object.values(typeOfPokemon).forEach(function(elementType){
+               //console.log(elementSecondType[1].m_type_effectiveness)
+                somme =  somme * elementSecondType[1].m_type_effectiveness[elementType.m_type];
+            })
+            console.log(somme)
+            if(somme==maxEfficacite){
+                resultatAttackTypes.push(elementSecondType[1].m_type);
+            }
+            else if(somme>maxEfficacite){
+                maxEfficacite = somme;
+                resultatAttackTypes = [];
+                resultatAttackTypes.push(elementSecondType[1].m_type);
+            }
+            
+            
+        })
+
+    return resultatAttackTypes
+        
+
+        
+        
+
+        
+    
+    
 
 }
+// Test de la question 7 avec le pokemon Bruyvern de type vol et dragon
+// console.log(getBestAttackTypesForEnemy("Noivern"));
 
 
 
