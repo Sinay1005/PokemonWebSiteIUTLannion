@@ -1,11 +1,10 @@
 // Import des classes
 
-import { Pokemon } from "./Pokemon.js";
+import { Pokemon } from "../data/Pokemon.js";
 
-import { Types } from "./Types.js";
+import { Types } from "../data/Types.js";
 
-import { Attack } from "./Attack.js";
-import { pokemon } from "../JSON/pokemon.js";
+
 
  // Import des pokemons
 Pokemon.import_pokemon();
@@ -43,6 +42,7 @@ function getPokemonsByType(typeName){
 
     });
     // On retourne la liste des pokemons
+    console.table(resultPokemonByType)
     return resultPokemonByType;
 
 }
@@ -72,7 +72,7 @@ function getPokemonsByAttacks(attackName){
         })
 
     })
-
+    console.table(resultPokemonByAttacks)
     return resultPokemonByAttacks;
     
 
@@ -103,13 +103,17 @@ function  getAttacksByType(typeName){
         
         attackOfPokemon.forEach((elementAttack)=>{
             // On vérifie si l'attaque à le type qu'on cherche et qu'elle n'est pas présente dans les resultats
-            if(elementAttack.m_type==typeName && resultatAttackByType.indexOf(elementAttack)==-1){
-                // Si vraie on ajoute à la liste des résultats
-                resultatAttackByType.push(elementAttack)
-            }
+            
+            Object.values(elementAttack).forEach(function(element){
+                if(element.m_type==typeName && resultatAttackByType.indexOf(element)==-1){
+                    // Si vraie on ajoute à la liste des résultats
+                    resultatAttackByType.push(element)
+                }
+            })
         })
 
    })
+   console.table(resultatAttackByType)
    // Retourne les attaques avec le type cherché
    return resultatAttackByType;
 }
@@ -140,6 +144,7 @@ function sortPokemonByNames(){
 
     })
     // Retourne la liste des Pokemons triés par nom
+    console.table(resultatSortNamePokemon);
     return resultatSortNamePokemon;
     
 }
@@ -152,16 +157,10 @@ function sortPokemonByStamina(){
     // Liste des Pokemons triés par Stamina dans l'ordre décroissant
     let resultatSortStaminaPokemon = Object.values(lesPokemons).sort(function(p1,p2){
         // Si la stamina du pokemon 1 est plus grande que le pokemon 2 on le place avant
-        if(p1.m_base_stamina > p2.m_base_stamina){
-            return -1;
-        }
-        // Sinon l'inverse
-        if(p2.m_base_stamina < p2.m_base_stamina){
-            return 1;
-        }
-        // Sinon ils ont la même stamina
-        return 0;
+        return p1.m_base_stamina - p2.m_base_stamina;
+        
     })
+    console.table(resultatSortStaminaPokemon)
     // Retourne la liste des Pokemons triés par stamina dans l'ordre décroissant
     return resultatSortStaminaPokemon;
 
@@ -213,24 +212,21 @@ function getWeakestEnemies(attackName){
             }
         }))
         
-        Object.entries(lesEfficacites.m_type_effectiveness).forEach(function(element){
-            //console.log(element);
-
-        })
+        
         // Maintenant on parcout les pokemons pour connaitre ceux où cette attaque est la plus efficace
         if(lesEfficacites){
             // On déclare la variable qui compare l'efficacité
             let maxEfficacite = -1;
             Object.keys(lesPokemons).forEach(function(key){
-                let lePokemon = lesPokemons[parseInt(key)];
-                let typeOfPokemon = lePokemon.getTypes();
+                let pokemon = lesPokemons[parseInt(key)];
+                let typeOfPokemon = pokemon.getTypes();
                 let sommeEfficace=1;
                 // Pour chaque pokemon on va tester les efficacités de l'attaque sur lui (en testant les types du pokemons)
                 Object.values(typeOfPokemon).forEach(function(elementTypes){
                    
                     // On parcout les efficacités de l'attaque sur le(s) type(s) du pokemon
                     Object.entries(lesEfficacites.m_type_effectiveness).forEach(function(elementEfficace){
-
+                       // console.log(elementTypes.m_type)
                         if(elementTypes.m_type==elementEfficace[0]){
                             // On calculte le multiplicateur de l'attaque
                             sommeEfficace = sommeEfficace * elementEfficace[1];
@@ -240,7 +236,7 @@ function getWeakestEnemies(attackName){
                 })
                 // Si le multiplicateur est le même que le maximum on ajoute le pokemon
                 if(sommeEfficace==maxEfficacite){
-                    resultatWeakestEnemies.push(lePokemon);
+                    resultatWeakestEnemies.push(pokemon);
                 }
                 // Si on a trouve que l'attaque était plus efficace sur un pokemon
                 // On vide le tableau des anciens pokemons et on ajoute ce nouveau pokemon parcouru
@@ -250,7 +246,6 @@ function getWeakestEnemies(attackName){
                     resultatWeakestEnemies.push(pokemon)
                 }
                 
-                console.log(maxEfficacite)
                 
                
             })
@@ -266,11 +261,11 @@ function getWeakestEnemies(attackName){
         console.log("l'attaque n'existe pas");
     }
     // Retoune le résultat
+    console.table(resultatWeakestEnemies)
     return resultatWeakestEnemies;
 }
 
 // Test de la question 6 pour l'attaque Acide de type Poison
-//console.log(getWeakestEnemies("Blizzard"))
 
 
 // 7) Retourne la liste des types d'attaques les plus efficaces contre un Pokemon donné
@@ -289,48 +284,74 @@ function getBestAttackTypesForEnemy(name){
             return;
         }
     })
+    // Type(s) du pokemon, cherché par son nom
     let typeOfPokemon = pokemon.getTypes();
-    
+    // Variabe qui calcule l'efficacité et le max pour savoir quel type d'attaque
+    // est le plus efficace
     let maxEfficacite = -1;
     let somme;
     let lesTypes = Types.all_types;
     
-    
+        // On parcout les types et leurs efficacictés
         Object.entries(lesTypes).forEach(function(elementSecondType){
             somme = 1;
+            // On parcout à chaque efficacité les types du pokemon pour comparer les efficacités
             Object.values(typeOfPokemon).forEach(function(elementType){
                //console.log(elementSecondType[1].m_type_effectiveness)
                 somme =  somme * elementSecondType[1].m_type_effectiveness[elementType.m_type];
             })
-            console.log(somme)
+            // Si le type est aussi efficace que le max on l'ajoute aux types les plus efficaces
             if(somme==maxEfficacite){
-                resultatAttackTypes.push(elementSecondType[1].m_type);
+                resultatAttackTypes.push(elementSecondType[1]);
             }
+            // Si on trouve un type plus efficace que les autres on supprime les autres
+            // et on garde le nouveau qui est encore plus efficace
             else if(somme>maxEfficacite){
                 maxEfficacite = somme;
                 resultatAttackTypes = [];
-                resultatAttackTypes.push(elementSecondType[1].m_type);
+                resultatAttackTypes.push(elementSecondType[1]);
             }
             
             
         })
-
+        // Retourne la liste des types
+    console.table(resultatAttackTypes);
     return resultatAttackTypes
-        
-
-        
-        
-
-        
-    
-    
 
 }
 // Test de la question 7 avec le pokemon Bruyvern de type vol et dragon
-// console.log(getBestAttackTypesForEnemy("Noivern"));
+//console.table(getBestAttackTypesForEnemy("Noivern"));
 
 
 
+// Evenements balisa a test
+
+
+
+document.addEventListener('DOMContentLoaded',function(){
+    const lesTest = [
+    {id : "test1",func:getPokemonsByType,param:["Poison"]},
+    {id :"test2",func:getPokemonsByAttacks,param:["Tackle"]},
+    {id:"test3",func:getAttacksByType,param:["Water"]},
+    {id:"test4",func:sortPokemonByNames,param:null},
+    {id:"test5",func:sortPokemonByStamina,param:null},
+    {id:"test6",func:getWeakestEnemies,param:["Blizzard"]},
+    {id:"test7",func:getBestAttackTypesForEnemy,param:["Noivern"]}
+]
+
+    lesTest.forEach(test=>{
+        const  elem = document.getElementById(test.id);
+        elem.addEventListener('click',function(){
+            if(test.param==null){
+                test.func.apply(null)
+            }
+            else{
+                test.func.apply(null,test.param)
+            }
+        })     
+    })
+    
+})
 
 
 

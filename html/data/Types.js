@@ -1,4 +1,4 @@
-import { type_effectiveness}  from '../JSON/type_effectiveness.js';
+import { type_effectiveness}  from './type_effectiveness.js';
 
  export class Types {
     static all_types = {};
