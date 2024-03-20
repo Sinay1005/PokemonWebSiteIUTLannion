@@ -1,6 +1,7 @@
 import { pokemon } from './pokemones.js';
 import { pokemon_types } from './pokemon_type.js';
 import { pokemon_moves }  from './pokemon_moves.js';
+import { generation } from './generation.js';
 import  {Types } from './Types.js';
 import {Attack} from './Attack.js'; 
 
@@ -8,13 +9,14 @@ import {Attack} from './Attack.js';
 
     static  all_pokemons = {};
     
-    constructor(id,name,form,base_defense,base_attack,base_stamina,type, charged_moves, fast_moves){
+    constructor(id,name,form,base_defense,base_attack,base_stamina,type, generation, charged_moves, fast_moves){
         if (Pokemon.all_pokemons[id]) {
             return Pokemon.all_pokemons[id];
         }
         this.m_id = id;
         this.m_nom = name;
         this.m_form = form;
+        this.m_generation = generation;
         this.m_base_attack = base_attack;
         this.m_base_defense = base_defense;
         this.m_base_stamina = base_stamina;
@@ -25,7 +27,7 @@ import {Attack} from './Attack.js';
     }
 
     toString() {
-        return `Pokemon ID: ${this.m_id}, Name: ${this.m_nom}, Form: ${this.m_form}, Base Attack: ${this.m_base_attack}, Base Defense: ${this.m_base_defense}, Base Stamina: ${this.m_base_stamina}, Type: ${this.m_type}, Charged_moves: ${this.m_charged_moves}, Fast_moves: ${this.m_fast_moves}`;
+        return `Pokemon ID: ${this.m_id}, Name: ${this.m_nom}, Form: ${this.m_form}, Generation: ${this.m_generation}, Base Attack: ${this.m_base_attack}, Base Defense: ${this.m_base_defense}, Base Stamina: ${this.m_base_stamina}, Type: ${this.m_type}, Charged_moves: ${this.m_charged_moves}, Fast_moves: ${this.m_fast_moves}`;
     }
 
     getTypes() {
@@ -52,6 +54,18 @@ import {Attack} from './Attack.js';
         return null;
     }
 
+    static getGenerationIntoFile(id) {
+        for (const genData of Object.values(generation)) {
+            const pokemon = genData.find(pokemon => pokemon.id === id);
+            if (pokemon) {
+                return pokemon.generation_number;
+            }
+        }
+        return null;
+    }
+    
+    
+
     static import_pokemon() {
         pokemon.forEach(pokemonData => {
             if (pokemonData.form === "Normal") {
@@ -73,14 +87,14 @@ import {Attack} from './Attack.js';
                     let newMove = new Attack(move, "fast_moves");
                     fest_moves_table.push(newMove);
                 })
-                
-                const newPokemon = new Pokemon(pokemon_id, pokemon_name, form, base_defense, base_attack, base_stamina, pokemon_types, charged_moves_table, fest_moves_table);
+                let generation = Pokemon.getGenerationIntoFile(pokemon_id);
+                const newPokemon = new Pokemon(pokemon_id, pokemon_name, form, base_defense, base_attack, base_stamina, pokemon_types,generation, charged_moves_table, fest_moves_table);
                 Pokemon.all_pokemons[pokemon_id] = newPokemon;
             }
         });
     }
 }
-/** 
+/*
 Pokemon.import_pokemon();
 
 const pikachu = Pokemon.all_pokemons[25];
