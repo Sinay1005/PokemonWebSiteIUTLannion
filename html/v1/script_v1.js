@@ -1,67 +1,55 @@
-//Ajout d'un Pokemon dans le tableau
-var secondLine = document.createElement("tr");
+import { Pokemon } from '../data/Pokemon.js'; 
 
-//Ajout de L'id
-var id = document.createElement("td");
-id.setAttribute("label", "ID");
-var textID = document.createTextNode("25");
-id.appendChild(textID);
-secondLine.appendChild(id); 
+Pokemon.import_pokemon();
+let pokemonList = Pokemon.all_pokemons;
 
-//Ajout du nom
-var nom = document.createElement("td");
-nom.setAttribute("label", "NOM");
-var textNom = document.createTextNode("Pikachu");
-nom.appendChild(textNom);
-secondLine.appendChild(nom);
+const pokemonArray = Object.values(pokemonList);
 
-//Ajout de la génération
-var gen = document.createElement("th");
-gen.setAttribute("label", "GEN");
-var textGen = document.createTextNode("1");
-gen.appendChild(textGen);
-secondLine.appendChild(gen);
+pokemonArray.forEach(item => {
+    ajoutPokemonInTable(item);
+});
 
-//Ajout du types
-var types = document.createElement("th");
-types.setAttribute("label", "TYPES");
-var listType = document.createElement("ul");
-var puce1 = document.createElement("li");
-var textPuce1 = document.createTextNode("Electric");
-puce1.appendChild(textPuce1);
-listType.appendChild(puce1)
-types.appendChild(listType)
-secondLine.appendChild(types);
+function getFormatedTypes(type){
+    let ul = document.createElement("ul")
+    type.forEach(item => {
+        let li = document.createElement("li")
+        li.textContent = item.m_type;
+        ul.appendChild(li)
+    });
+    return ul
+}
 
-//Ajout de l'endurance
-var end = document.createElement("th");
-end.setAttribute("label", "ENDURANCE");
-var textEnd = document.createTextNode("111");
-end.appendChild(textEnd);
-secondLine.appendChild(end); 
+function ajoutPokemonInTable(item) {
+    var ligne = document.createElement("tr");
+    let info = {
+        m_id: "ID",
+        m_nom: "NOM",
+        m_generation: "GEN",
+        m_type: "TYPES",
+        m_base_stamina: "ENDURANCE",
+        m_base_attack: "PTSD",
+        m_base_defense: "PTSD",
+    };
 
-//Ajout de PTSA
-var ptsa = document.createElement("th");
-ptsa.setAttribute("label", "PTSA");
-var textPtsa = document.createTextNode("112");
-ptsa.appendChild(textPtsa);
-secondLine.appendChild(ptsa); 
+function formatId(id) {
+    const paddedId = String(id).padStart(3, '0'); 
+    return paddedId;
+}
 
-//Ajout de PTSD
-var ptsd = document.createElement("th");
-ptsd.setAttribute("label", "PTSD");
-var textPtsd = document.createTextNode("96");
-ptsd.appendChild(textPtsd);
-secondLine.appendChild(ptsd); 
-
-//Ajout IMG
-var imgTH = document.createElement("th");
-imgTH.setAttribute("label", "IMG");
-var img = document.createElement("img");
-img.setAttribute("src", "../webp/thumbnails/025.webp");
-imgTH.appendChild(img)
-secondLine.appendChild(imgTH); 
-
-var table = document.querySelector("table");
-table.appendChild(firstline); 
-table.appendChild(secondLine)
+    Object.keys(info).forEach(key => {
+        var tableData = document.createElement("td");
+        tableData.setAttribute("label", info[key]);
+        if (key == "m_type") {
+            let formattedTypes = getFormatedTypes(item[key]);
+            tableData.appendChild(formattedTypes);
+        } else {
+            tableData.textContent = item[key];
+        }
+        ligne.appendChild(tableData);
+    });
+    let img = document.createElement("img");
+    img.setAttribute("src", `../webp/thumbnails/${formatId(item.m_id)}.webp`);
+    ligne.appendChild(img)
+    const tbody = document.querySelector('table > tbody');
+    tbody.appendChild(ligne)
+}
