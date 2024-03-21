@@ -1,93 +1,46 @@
 // Import des classes
-
 import { Pokemon } from "../data/Pokemon.js";
 
 import { Types } from "../data/Types.js";
 
-
-
  // Import des pokemons
 Pokemon.import_pokemon();
+
  // On récupère les pokemons
 const lesPokemons = Pokemon.all_pokemons;
 
 
-// 1) Donner la liste des pokemons par type
-
 /**
- * Fonction qui retourne la liste des pokemons avec un certain type
- * 
+ * 1) Fonction qui retourne la liste des pokemons avec un certain type
  * @param {string} typeName 
- * 
  * @returns {Array}
  */
 function getPokemonsByType(typeName){
-    // Déclaration de la liste des résultats
-    let resultPokemonByType=[];
-    // On parcourt les Pokemons avec le type typeName
-    Object.keys(lesPokemons).forEach(function(key){
-       // On récupère le pokemon
-       let pokemon  = lesPokemons[parseInt(key)];
-       // On récupère le(s) types(s) du pokemon
-       let typeOfPokemon = pokemon.getTypes();
-       // On parcourt ses types
-       typeOfPokemon.forEach((elementType)=>{
-            // Si le type demandé est égale à un des types du Pokemon
-            if(elementType.m_type==typeName){
-                // On l'ajoute à la liste des résultats
-                resultPokemonByType.push(lesPokemons[parseInt(key)])
-
-            }
-       })
-
-    });
-    // On retourne la liste des pokemons
-    console.table(resultPokemonByType)
-    return resultPokemonByType;
+    //Filtrer la liste pour les Pokémon qui respectent la condition
+    let pokemonTypeListe = Object.values(lesPokemons).filter(item => item.getTypes().some(types => types.m_type === typeName));
+    console.table(pokemonTypeListe)
+    return pokemonTypeListe;
 
 }
-// Test de la question 1 des Tests
-// console.log(getPokemonsByType("Poison"))
-
-// 2) Donner la liste des pokemons par attaque
-
-function getPokemonsByAttacks(attackName){
-    // Déclaration de la liste des résultat des pokemons par attaque
-    let resultPokemonByAttacks = [];
-    // On parcout les pokemons
-    Object.keys(lesPokemons).forEach(function(key){
-        // On récupère le pokemon
-        let pokemon = lesPokemons[parseInt(key)];
-        // On récupère les attaques
-        let attackOfPokemon = pokemon.getAttacks();
-        Object.values(attackOfPokemon).forEach(function(elementAttack){
-            
-            Object.values(elementAttack).forEach((function(elementOneAttack){
-                if(elementOneAttack.m_name == attackName ){
-                    resultPokemonByAttacks.push(pokemon);
-                }
-
-            }))
-
-        })
-
-    })
-    console.table(resultPokemonByAttacks)
-    return resultPokemonByAttacks;
-    
-
-}
-// Test de la question 2
-//console.log(getPokemonsByAttacks("Tackle"))
-
-// 3) Lister les attaques par un type
 
 
 /**
- * Fonction qui retourne la liste des attaques qui ont le typeName
- * 
+ * 2) Fonction qui Donne la liste des pokemons qui possède l'attaque passé en paramètre
+ * @param {string} attackName 
+ * @returns {Array}
+ */
+function getPokemonsByAttacks(attackName){
+    //.flat important pour concaténer charged_moves et fast_moves return par getAttacks
+    //.some renvoit true si au moins un élément satisfait la condition donc si filter(true) ==> ajouter à la liste
+    let pokemonAttaqueList = Object.values(lesPokemons).filter(pokemon => pokemon.getAttacks().flat().some(attack => attack.m_name == attackName));
+    console.table(pokemonAttaqueList)
+    return pokemonAttaqueList;
+}
+
+
+/**
+ * 3) Fonction qui retourne la liste des attaques qui ont le typeName
  * @param {string} typeName 
- * 
  * @returns {Array}
  */
 function  getAttacksByType(typeName){
