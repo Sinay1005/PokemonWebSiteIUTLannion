@@ -18,9 +18,14 @@ const lesPokemons = Pokemon.all_pokemons;
 function getPokemonsByType(typeName){
     //Filtrer la liste pour les Pokémon qui respectent la condition
     let pokemonTypeListe = Object.values(lesPokemons).filter(item => item.getTypes().some(types => types.m_type === typeName));
+    console.log(pokemonTypeListe)
+    if(pokemonTypeListe.length==0){
+        return null;
+    }
+    else{
     console.table(pokemonTypeListe)
     return pokemonTypeListe;
-
+    }
 }
 
 
@@ -33,8 +38,13 @@ function getPokemonsByAttacks(attackName){
     //.flat important pour concaténer charged_moves et fast_moves return par getAttacks
     //.some renvoit true si au moins un élément satisfait la condition donc si filter(true) ==> ajouter à la liste
     let pokemonAttaqueList = Object.values(lesPokemons).filter(pokemon => pokemon.getAttacks().flat().some(attack => attack.m_name == attackName));
-    console.table(pokemonAttaqueList)
-    return pokemonAttaqueList;
+    if(pokemonAttaqueList.length==0){
+        return null;
+    }
+    else{
+        console.table(pokemonAttaqueList)
+        return pokemonAttaqueList;
+    }
 }
 
 
@@ -66,9 +76,14 @@ function  getAttacksByType(typeName){
         })
 
    })
+   if(resultatAttackByType.length==0){
+        return null;
+   }
+   else{
    console.table(resultatAttackByType)
    // Retourne les attaques avec le type cherché
    return resultatAttackByType;
+   }
 }
 // Test de la question 3
 // console.log(getAttacksByType("Water"))
@@ -124,6 +139,7 @@ function sortPokemonByStamina(){
 // 6) Retourner la liste des pokemons pour lesquels l'attaque choisie est la plus efficace
 
 function getWeakestEnemies(attackName){
+    console.log(attackName)
     let typeName;
     //Liste des Pokemons pour lesquels l'attaque chosie est la plus efficace
     let resultatWeakestEnemies = [];
@@ -207,11 +223,13 @@ function getWeakestEnemies(attackName){
         }
         else{
             console.log("Le type n'existe pas");
+            return null;
         }
         
     }
     else{
         console.log("l'attaque n'existe pas");
+        return null;
     }
     // Retoune le résultat
     console.table(resultatWeakestEnemies)
@@ -237,6 +255,11 @@ function getBestAttackTypesForEnemy(name){
             return;
         }
     })
+    // Si le pokemon saisie n'existe pas on stoppe la suite
+    if(pokemon==null){
+        return null;
+    }
+    else{
     // Type(s) du pokemon, cherché par son nom
     let typeOfPokemon = pokemon.getTypes();
     // Variabe qui calcule l'efficacité et le max pour savoir quel type d'attaque
@@ -270,6 +293,7 @@ function getBestAttackTypesForEnemy(name){
         // Retourne la liste des types
     console.table(resultatAttackTypes);
     return resultatAttackTypes
+    }
 
 }
 // Test de la question 7 avec le pokemon Bruyvern de type vol et dragon
@@ -280,31 +304,114 @@ function getBestAttackTypesForEnemy(name){
 // Evenements balisa a test
 
 
-
+// On attend que tous les elements de la page soit chargés
 document.addEventListener('DOMContentLoaded',function(){
+    // Liste des tests
     const lesTest = [
-    {id : "test1",func:getPokemonsByType,param:["Poison"]},
-    {id :"test2",func:getPokemonsByAttacks,param:["Tackle"]},
-    {id:"test3",func:getAttacksByType,param:["Water"]},
-    {id:"test4",func:sortPokemonByNames,param:null},
-    {id:"test5",func:sortPokemonByStamina,param:null},
-    {id:"test6",func:getWeakestEnemies,param:["Blizzard"]},
-    {id:"test7",func:getBestAttackTypesForEnemy,param:["Noivern"]}
+    {id : "test1",func:getPokemonsByType,result:null,param:true},
+    {id :"test2",func:getPokemonsByAttacks,result:null,param:true},
+    {id:"test3",func:getAttacksByType,result:null,param:true},
+    {id:"test4",func:sortPokemonByNames,result:sortPokemonByNames(),param:false},
+    {id:"test5",func:sortPokemonByStamina,result:sortPokemonByStamina(),param:false},
+    {id:"test6",func:getWeakestEnemies,result:null,param:true},
+    {id:"test7",func:getBestAttackTypesForEnemy,result:null,param:true}
 ]
-
+    // Pour chaque bouton de test on applique la fonction correspondante
     lesTest.forEach(test=>{
         const  elem = document.getElementById(test.id);
+        
         elem.addEventListener('click',function(){
-            if(test.param==null){
-                test.func.apply(null)
+            // Ici on s'occupe de rendre propre la page
+            // à chaque click sur un test pour faire apparaître
+            // les donnés adéquates (erreur ou tableau)
+            let erreur = document.getElementById("erreur");
+            erreur.style.display='none'
+            let table = document.getElementById("table");
+            let enTete = document.getElementById("entete");
+            let tbdoy = document.getElementById("tbody");
+            enTete.innerHTML='';
+            tbdoy.innerHTML='';
+            // On récupère la saisie
+            let saisie = document.getElementById("parametre")
+            if(test.param==false){
+
+                //test.func.apply(null)
+                
+                afficheTableau(table,test.result);
+
+                
+                
+                
             }
             else{
-                test.func.apply(null,test.param)
+               // test.func.apply(null,test.param)
+                test.result = test.func(saisie.value);
+                console.log(saisie.value)
+                // Si le résultat de la fonction est vide (Saisie d'une donnée non existante)
+                // On affiche un message d'erreur
+                if(test.result==null){
+                    
+                    erreur.style.display = "flex"
+                    let texteErreur = document.getElementById("text_erreur");
+                    texteErreur.innerText = "L'élément "+saisie.value+" en paramètre de test est introuvable dans les donnés Pokemon";
+
+                }
+                else{
+                    
+                    afficheTableau(table,test.result)
+
+                }
+
             }
         })     
     })
     
 })
+
+/**
+ * Fonction qui affiche un tableau de données selon le test selectionné
+ * 
+ * @param {Object} tableau 
+ * @param {Array} data 
+ */
+function afficheTableau(tableau,data){
+    let row = document.createElement("tr");
+    let enTete = document.getElementById("entete");
+    let tbdoy = document.getElementById("tbody");
+    enTete.innerHTML='';
+    tbdoy.innerHTML='';
+    tableau.style.visibility = "visible"
+    let headerCreated = false;
+    // l'en tête du tableau qui apparait
+    Object.values(data).forEach(function(element){
+        if(!headerCreated)
+        Object.keys(element).forEach(function(elem){
+            let th = document.createElement("th");
+            th.textContent = elem;
+            enTete.appendChild(th);
+            
+            
+            
+        })
+        headerCreated=true
+        
+    })
+    Object.values(data).forEach(function(elem){
+        let ligne = document.createElement("tr");
+        Object.entries(elem).forEach(function(element){
+            let td = document.createElement("td");
+            if(Array.isArray(element[1]) || element[1] instanceof Object){
+                td.textContent = JSON.stringify(element[1])
+            
+            } 
+            else {
+                td.textContent = element[1];
+            }
+            ligne.appendChild(td);
+        })
+        tbdoy.appendChild(ligne);
+    })
+}
 
 
 

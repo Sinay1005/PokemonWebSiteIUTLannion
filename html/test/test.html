@@ -4,11 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <!-- Script de style-->
     <link rel="stylesheet" href="../css/styles.css">
+    <!-- Script  de test-->
     <script type="module" src="../test/Test.js"></script>
 </head>
-<body>
+<body id="bodyTest">
     <!-- Conteneur des balises a de tests-->
+    <h1>Test des Pokemons</h1>
     <div class="test-links">
         <!-- Balise a test 1-->
         <a href="#" id="test1">Test 1</a>
@@ -24,6 +27,34 @@
         <a href="#" id="test6">Test 6</a>
         <!-- Balise a test 7-->
         <a href="#" id="test7">Test 7</a>
+    </div> 
+    <!--Saisie des tests-->
+    <div class="formulaire">
+        <div class="block-formulaire">
+            <label for="parametre" class="labelTest">Valeur Test</label>
+            <input type="text" placeholder="Argument" id="parametre">
+        </div>
+    </div>
+
+    <!--Table qui affiche les tests--> 
+    <div class="container-table">
+        <table class="table-fill" id="table">
+            <thead>
+                <tr id="entete">
+                
+                </tr>
+            </thead>
+            <tbody class="table-hover" id="tbody">
+            
+                
+            </tbody>
+        </table>
+    </div>
+    <!--Conteneur des messages d'erreurs-->
+    <div class="container_erreur">
+        <div id="erreur">
+            <p id="text_erreur"></p>
+        </div>
     </div>
 </body>
 </html>
