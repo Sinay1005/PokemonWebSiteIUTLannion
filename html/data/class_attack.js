@@ -23,11 +23,11 @@ import { charged_moves } from './charged_moves.js';
     }
 
     toString() {
-        let criticalChanceString = (this.m_critical_chance !== null) ? `, Critical Chance: ${this.m_critical_chance}` : '';
-        return `${this.m_name} (${this.m_type}) - Power: ${this.m_power}, Stamina Loss Scaler: ${this.m_staminaLossScaler}, Duration: ${this.m_duration}, Energy Delta: ${this.m_energyDelta}${criticalChanceString}`;
+        let criticalChanceString = (this.m_critical_chance !== null) ? `, Chance critique: ${this.m_critical_chance}` : '';
+        return `${this.m_name} (${this.m_type}) - Power: ${this.m_power}, Stamina : ${this.m_staminaLossScaler}, Duration: ${this.m_duration}, Energy delta: ${this.m_energyDelta}${criticalChanceString}`;
     }
     
-
+    // Fonction qui va chercher toutes les données pour le constructeur
     completeConstructor(name) {
         let data = this.m_isChargedMoves ? charged_moves : fast_moves;
         let move = data.find(moves => moves.name === name);
@@ -42,7 +42,7 @@ import { charged_moves } from './charged_moves.js';
                 this.m_critical_chance = critical_chance;
             }
         } else {
-            console.log("No moovment find");
+            console.log("Pas de mouvement trouvé");
         }
     }
 }

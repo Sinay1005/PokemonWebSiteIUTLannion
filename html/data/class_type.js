@@ -9,6 +9,7 @@ import { type_effectiveness}  from './type_effectiveness.js';
         }
         
         this.m_type = type;
+        // Récupération des types effectiveness
         this.m_type_effectiveness = type_effectiveness[type];
         Types.all_types[type] = this;
         return this;
