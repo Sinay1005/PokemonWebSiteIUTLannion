@@ -2,8 +2,8 @@ import { pokemon } from './pokemones.js';
 import { pokemon_types } from './pokemon_type.js';
 import { pokemon_moves }  from './pokemon_moves.js';
 import { generation } from './generation.js';
-import  {Types } from './Types.js';
-import {Attack} from './Attack.js'; 
+import  {Types } from './class_type.js';
+import {Attack} from './class_attack.js'; 
 
  export class Pokemon{
 

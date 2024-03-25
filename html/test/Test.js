@@ -1,7 +1,7 @@
 // Import des classes
-import { Pokemon } from "../data/Pokemon.js";
+import { Pokemon } from "../data/class_pokemon.js";
 
-import { Types } from "../data/Types.js";
+import { Types } from "../data/class_type.js";
 
  // Import des pokemons
 Pokemon.import_pokemon();
@@ -18,10 +18,7 @@ const lesPokemons = Pokemon.all_pokemons;
 function getPokemonsByType(typeName){
     //Filtrer la liste pour les Pokémon qui respectent la condition
     let pokemonTypeListe = Object.values(lesPokemons).filter(item => item.getTypes().some(types => types.m_type === typeName));
-    console.log(pokemonTypeListe)
-    if(pokemonTypeListe.length==0){
-        return null;
-    }
+    if(pokemonTypeListe.length==0) return null
     else{
     console.table(pokemonTypeListe)
     return pokemonTypeListe;
@@ -38,9 +35,7 @@ function getPokemonsByAttacks(attackName){
     //.flat important pour concaténer charged_moves et fast_moves return par getAttacks
     //.some renvoit true si au moins un élément satisfait la condition donc si filter(true) ==> ajouter à la liste
     let pokemonAttaqueList = Object.values(lesPokemons).filter(pokemon => pokemon.getAttacks().flat().some(attack => attack.m_name == attackName));
-    if(pokemonAttaqueList.length==0){
-        return null;
-    }
+    if(pokemonAttaqueList.length==0) null
     else{
         console.table(pokemonAttaqueList)
         return pokemonAttaqueList;
